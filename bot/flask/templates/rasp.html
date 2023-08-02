@@ -1,0 +1,25 @@
+{% extends 'main.html' %}
+{% block body %}
+
+<div class="element">
+    <div class="head_date">
+        <div class="day">{{day}}</div>
+        <div class="week">{{week}}</div>
+    </div>
+    <div class="main_info">
+        <div class="lesson_object">
+            <div class="name_lesson">{{name_lesson}}</div>
+            <div class="lesson_item">
+                <div class="time_lesson">{{first_time}} - {{last_time}}</div>
+                <div class="type_lesson"><i class="fa-solid fa-pen"></i>{{type_lesson}}</div>
+                <div class="lecturer"><i class="fa-solid fa-user"></i>{{name_lecturer}}</div>
+                <div class="stream"><i class="fa-solid fa-users"></i>{{stream}}</div>
+                <div class="building-auditorium"><i class="fa-solid fa-house"></i>{{auditorium}}</div>
+            </div>
+        </div>
+
+    </div>
+    
+</div>
+
+{% endblock %}

@@ -2,7 +2,7 @@ from aiogram import Bot, Dispatcher, executor, types, filters
 from aiogram.types.web_app_info import WebAppInfo
 from config.config import *
 from parser.parser import Parser
-from main import Bot_DB
+#from main import Bot_DB
 
 
 
@@ -43,7 +43,7 @@ async def help_comamnd(message: types.Message):
 
 @DP.message_handler(filters.Text(equals='Сегодня'))
 async def today_button(message: types.Message):
-    Bot_DB.add_name(user_id=message.from_user.id, name=message.from_user.full_name, button='Сегодня', time=datetime.datetime.now())
+    #Bot_DB.add_name(user_id=message.from_user.id, name=message.from_user.full_name, button='Сегодня', time=datetime.datetime.now())
     
     dataframe = Parser(first_date='06.12', second_date='06.20').rasp()
     date = datetime.datetime.now()
@@ -67,7 +67,7 @@ async def today_button(message: types.Message):
 
 @DP.message_handler(filters.Text(equals='Завтра'))
 async def today_button(message: types.Message):
-    Bot_DB.add_name(user_id=message.from_user.id, name=message.from_user.full_name, button='Завтра', time=datetime.datetime.now())
+    #Bot_DB.add_name(user_id=message.from_user.id, name=message.from_user.full_name, button='Завтра', time=datetime.datetime.now())
 
     dataframe = Parser(first_date='06.12', second_date='06.20').rasp()
     date = datetime.datetime.now() + timedelta(days=1)
@@ -91,7 +91,7 @@ async def today_button(message: types.Message):
 
 @DP.message_handler(filters.Text(equals='Зачетка'))
 async def test(message: types.Message):
-    Bot_DB.add_name(user_id=message.from_user.id, name=message.from_user.full_name, button='Зачетка', time=datetime.datetime.now())
+    #Bot_DB.add_name(user_id=message.from_user.id, name=message.from_user.full_name, button='Зачетка', time=datetime.datetime.now())
 
 
     await message.answer(text='text')
