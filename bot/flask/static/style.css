@@ -1,0 +1,99 @@
+.main-container {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+}
+
+header {
+    position: fixed;
+    width: 100%;
+    left: 0;
+    top: 0;
+    z-index: 120;
+    direction: ltr;
+    background: rgb(30, 52, 74);
+}
+
+.object {
+    float: left;
+    margin-top: 50px;
+    margin-bottom: 5px;
+    margin-right: 30px;
+    margin-left: 30px;
+
+
+    }
+
+.element {
+    background: rgb(30, 52, 74);
+    color: white;
+    font-size: 40px;
+    /* line-height: 220px; */
+    width: 320px;
+    height: 320px;
+    text-align: center;
+    border-radius: 15px;
+    overflow: auto;
+}
+
+.Button {
+    width: 300px;
+    line-height: 70px;
+    background: rgb(30, 52, 74);
+    margin-top: 20px
+}
+
+
+button {
+    margin: 22px;
+}
+
+.container {
+    border: 1px solid rgb(30, 52, 74);
+    width: 343px;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin-top: 80px
+}
+.logo {
+    height: 81px;
+    margin-top: 18px;
+    margin-bottom: 15px
+}
+
+.image-tovar {
+    height: 258px;
+    margin-top: 34px;
+}
+.date {
+    width: 144px;
+    background: rgb(50, 70, 90);
+    border-radius: 15px;
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+.week {
+    font-size: 15px;
+    width: 25px;
+    height: 25px;
+}
+.day_lesson {
+    font-size: 15px;
+    width: 25px;
+    height: 25px
+
+}
+.mouth_lesson {
+    font-size: 15px;
+    width: 45px;
+    height: 25px;
+}
+.time_lesson {
+    padding-top: 10px;
+    font-size: 20px;
+}
+
