@@ -23,6 +23,8 @@ i {
     display: flex;
     flex-wrap: wrap;
     align-content: flex-start;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
 }
 
 .head_date {
@@ -46,6 +48,7 @@ i {
     margin: auto;
     margin-top: 7px;
     border-radius: 15px;
+    margin-bottom: 8px;
 }
 
 .lesson_item {
@@ -58,14 +61,14 @@ i {
     flex-direction: column;
     align-items: flex-start;
 }
-
+/*
 .week {
     width: 25px;
     height: 25px;
     font-size: 15px;
     padding-top: 3px;
 }
-
+*/
 .day{
     padding-right: 10px;
     font-size: 20px;
