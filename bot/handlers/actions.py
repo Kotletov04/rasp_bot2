@@ -1,6 +1,6 @@
 from aiogram import Bot, Dispatcher, executor, types, filters
 from aiogram.types.web_app_info import WebAppInfo
-import configparser
+from config.parser_config import read_config
 from parser.parser import Parser
 #from main import Bot_DB
 
@@ -11,10 +11,15 @@ from datetime import timedelta
 import pandas as pd
 
 
+'''
+URL = read_config('URL')
+TOKEN = read_config('TOKEN')
+HELP_COMMANDS = read_config('COMMANDS')
+'''
+URL = 'https://millci.pythonanywhere.com/'
+TOKEN = '5995472078:AAGZREez3GtWxhFVJMTfDknlGj4qgflVNao'
 
-URL = configparser.ConfigParser().read('URL')
-TOKEN = configparser.ConfigParser().read('TOKEN')
-HELP_COMMANDS = configparser.ConfigParser().read('COMMANDS')
+
 
 
 BOT = Bot(TOKEN)
@@ -49,9 +54,7 @@ async def start_command(message: types.Message):
     await message.answer(text='Привет', reply_markup=markup)
     await message.delete()
 
-@DP.message_handler(commands=['help'])
-async def help_comamnd(message: types.Message):
-    await message.reply(text=HELP_COMMANDS)
+
 
 @DP.message_handler(filters.Text(equals='Сегодня'))
 async def today_button(message: types.Message):
