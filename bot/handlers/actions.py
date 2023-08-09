@@ -1,6 +1,6 @@
 from aiogram import Bot, Dispatcher, executor, types, filters
 from aiogram.types.web_app_info import WebAppInfo
-from config.config import *
+import configparser
 from parser.parser import Parser
 #from main import Bot_DB
 
@@ -12,7 +12,9 @@ import pandas as pd
 
 
 
-
+URL = configparser.ConfigParser().read('URL')
+TOKEN = configparser.ConfigParser().read('TOKEN')
+HELP_COMMANDS = configparser.ConfigParser().read('COMMANDS')
 
 
 BOT = Bot(TOKEN)
@@ -24,16 +26,26 @@ DP = Dispatcher(BOT)
 
 @DP.message_handler(commands=['start'])
 async def start_command(message: types.Message):  
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    #markup.add(types.KeyboardButton('Open', web_app=WebAppInfo(url=URL)))
-    markup.add()
-    button_today = types.KeyboardButton(text='Сегодня')
-    button_tomorrow = types.KeyboardButton(text='Завтра')
-    button_rasp = types.KeyboardButton(text='Расписание', web_app=WebAppInfo(url=URL))
-    button_haha = types.KeyboardButton(text='Анекдоты точка ру')
-    button_zachetka = types.KeyboardButton(text='Зачетка')
-    button_news = types.KeyboardButton(text='Новости')
-    markup.add(button_today, button_tomorrow, button_rasp, button_haha, button_zachetka, button_news)
+    
+    buttons = [
+        [
+            types.KeyboardButton(text='Сегодня'),
+            types.KeyboardButton(text='Завтра'),
+            types.KeyboardButton(text='Расписание', web_app=WebAppInfo(url=URL)),   
+        ],
+
+        [
+            types.KeyboardButton(text='Анекдоты точка ру'),
+            types.KeyboardButton(text='Зачетка'),
+            types.KeyboardButton(text='Новости')
+        ],
+
+        [
+            types.KeyboardButton(text='Настройки')
+            ]
+    ]
+    
+    markup = types.ReplyKeyboardMarkup(keyboard=buttons, resize_keyboard=True)
     await message.answer(text='Привет', reply_markup=markup)
     await message.delete()
 
@@ -99,8 +111,21 @@ async def test(message: types.Message):
 
 @DP.message_handler(filters.Text(equals='Настройки'))
 async def test(message: types.Message):
-     
-    await message.answer(text='text')
+    buttons = [
+        [
+            types.KeyboardButton(text='Выбрать период расписания'),
+            types.KeyboardButton(text='Выбрать тему расписания'),
+            types.KeyboardButton(text='Включить/Отключить рассылку')
+
+         ],
+
+         [
+            types.KeyboardButton(text='Назад'),
+         ],
+    ]
+    markup = types.ReplyKeyboardMarkup(keyboard=buttons, resize_keyboard=True)
+    await message.answer(text='Привет', reply_markup=markup)
+    
 
 
 
