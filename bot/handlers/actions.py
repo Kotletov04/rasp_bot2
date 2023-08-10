@@ -2,6 +2,7 @@ from aiogram import Bot, Dispatcher, executor, types, filters
 from aiogram.types.web_app_info import WebAppInfo
 from config.parser_config import read_config
 from parser.parser import Parser
+from aiogram.types import InputFile
 #from main import Bot_DB
 
 
@@ -11,13 +12,9 @@ from datetime import timedelta
 import pandas as pd
 
 
-'''
-URL = read_config('URL')
-TOKEN = read_config('TOKEN')
-HELP_COMMANDS = read_config('COMMANDS')
-'''
-URL = 'https://millci.pythonanywhere.com/'
-TOKEN = '5995472078:AAGZREez3GtWxhFVJMTfDknlGj4qgflVNao'
+
+URL = read_config(name_key='URL', name_value='URL', name_file='config_settings.ini')
+TOKEN = read_config(name_key='TOKEN', name_value='TOKEN', name_file='config_settings.ini')
 
 
 
@@ -105,12 +102,12 @@ async def today_button(message: types.Message):
         await message.answer(text=text_list)
 
 @DP.message_handler(filters.Text(equals='Зачетка'))
-async def test(message: types.Message):
+async def reg(message: types.Message):
     #Bot_DB.add_name(user_id=message.from_user.id, name=message.from_user.full_name, button='Зачетка', time=datetime.datetime.now())
-
-
-    await message.answer(text='text')
-
+    
+    menu_inline = types.InlineKeyboardMarkup().insert(types.InlineKeyboardButton(text='Я ещё не смешарик', web_app=WebAppInfo(url=URL + 'reg'))) 
+    photo = InputFile('C:\\Users\\amino\\Desktop\\rasp_bot2\\bot\\handlers\\images\\cat.jpg')
+    await BOT.send_photo(photo=photo, chat_id=message.from_user.id, caption='Для продолжения необходимо указать логин и пароль от портала', reply_markup=menu_inline)
 
 @DP.message_handler(filters.Text(equals='Настройки'))
 async def test(message: types.Message):
