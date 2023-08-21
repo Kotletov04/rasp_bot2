@@ -1,8 +1,7 @@
 body {
     font-family: 'Geologica', sans-serif;
-    background: rgb(244, 245, 234);
+    background: rgb(52, 70, 93);
 }
-
 .main-container {
     display: flex;
     flex-wrap: nowrap;
@@ -31,7 +30,39 @@ header {
 }
 
 .logo {
-    height: 81px;
+    height: 56px;
     margin-top: 18px;
     margin-bottom: 15px
+}
+.zach_header {
+    color: white;
+    position: absolute;
+    top: 36px;
+    padding: 7px;
+    left: 133px;
+    background: rgb(63, 82, 101);
+    border-radius: 10px;
+}
+.life_header {
+    color: white;
+    position: absolute;
+    top: 36px;
+    padding: 7px;
+    left: 227px;
+    background: rgb(63, 82, 101);
+    border-radius: 10px;
+}
+.zach_header button {
+    border: none;
+    outline: none;
+    font: inherit;
+    color: inherit;
+    background-color: transparent;
+}
+.life_header button {
+    border: none;
+    outline: none;
+    font: inherit;
+    color: inherit;
+    background-color: transparent;
 }

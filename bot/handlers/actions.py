@@ -33,7 +33,7 @@ async def start_command(message: types.Message):
         [
             types.KeyboardButton(text='Сегодня'),
             types.KeyboardButton(text='Завтра'),
-            types.KeyboardButton(text='Расписание', web_app=WebAppInfo(url=URL)),   
+            types.KeyboardButton(text='Профиль', web_app=WebAppInfo(url=URL)),   
         ],
 
         [

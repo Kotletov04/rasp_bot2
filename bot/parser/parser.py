@@ -29,3 +29,28 @@ class Parser:
             needs_values.append([data[j][i] for i in columns])
         dataframe = pd.DataFrame(np.matrix(needs_values), columns=columns)
         return dataframe
+    
+    def zach(self, password, login, semester, index_lesson):
+
+
+        
+        data_ = {
+            'AUTH_FORM': 'Y',
+            'TYPE': 'AUTH',
+            'backurl': '/auth/?backurl=%2Fapp%2Fprofile%3Bmode%3Dedu%2Fmarks',
+            'USER_LOGIN': login,
+            'USER_PASSWORD': password,
+        }
+        session = requests.Session()
+        
+        session.post(url='https://portal.unn.ru', data=data_)
+        request = session.get('https://portal.unn.ru/bitrix/vuz/api/marks2/').text
+        
+        data = json.loads(request)
+        
+
+        
+
+        return data[0]['semesters'][semester]['data'][index_lesson]
+        
+        
