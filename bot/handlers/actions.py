@@ -1,5 +1,8 @@
 from aiogram import Bot, Dispatcher, executor, types, filters
 from aiogram.types.web_app_info import WebAppInfo
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram.dispatcher import FSMContext
+from aiogram.dispatcher.filters.state import StatesGroup, State
 from config.parser_config import read_config
 from parser.parser import Parser
 from aiogram.types import InputFile
@@ -23,7 +26,15 @@ BOT = Bot(TOKEN)
 DP = Dispatcher(BOT)
 
 
-    
+storage = MemoryStorage()
+class RegisterFSM(StatesGroup):
+    nickname_input = State()
+    pass_input = State()
+
+
+
+
+
 
 
 @DP.message_handler(commands=['start'])
@@ -33,12 +44,12 @@ async def start_command(message: types.Message):
         [
             types.KeyboardButton(text='Сегодня'),
             types.KeyboardButton(text='Завтра'),
-            types.KeyboardButton(text='Профиль', web_app=WebAppInfo(url=URL)),   
+            types.KeyboardButton(text='Профиль', web_app=WebAppInfo(url=URL), web_app_data='text'),   
         ],
 
         [
             types.KeyboardButton(text='Анекдоты точка ру'),
-            types.KeyboardButton(text='Зачетка'),
+            types.KeyboardButton(text='Регистрация'),
             types.KeyboardButton(text='Новости')
         ],
 
@@ -57,7 +68,7 @@ async def start_command(message: types.Message):
 async def today_button(message: types.Message):
     #Bot_DB.add_name(user_id=message.from_user.id, name=message.from_user.full_name, button='Сегодня', time=datetime.datetime.now())
     
-    dataframe = Parser(first_date='06.12', second_date='06.20').rasp()
+    dataframe = Parser(first_date='09.04', second_date='09.09').rasp()
     date = datetime.datetime.now()
     raspisaniye = dataframe[dataframe['date'] == date.date().strftime("%Y.%m.%d")]
     lecturer = raspisaniye['lecturer'].tolist()
@@ -101,13 +112,20 @@ async def today_button(message: types.Message):
             text_list = text_list+text
         await message.answer(text=text_list)
 
-@DP.message_handler(filters.Text(equals='Зачетка'))
+@DP.message_handler(filters.Text(equals='Регистрация'))
 async def reg(message: types.Message):
     #Bot_DB.add_name(user_id=message.from_user.id, name=message.from_user.full_name, button='Зачетка', time=datetime.datetime.now())
     
-    menu_inline = types.InlineKeyboardMarkup().insert(types.InlineKeyboardButton(text='Я ещё не смешарик', web_app=WebAppInfo(url=URL + 'reg'))) 
+    menu_inline = types.InlineKeyboardMarkup().insert(types.InlineKeyboardButton(text='Продолжить >>'))
     photo = InputFile('C:\\Users\\amino\\Desktop\\rasp_bot2\\bot\\handlers\\images\\cat.jpg')
-    await BOT.send_photo(photo=photo, chat_id=message.from_user.id, caption='Для продолжения необходимо указать логин и пароль от портала', reply_markup=menu_inline)
+    await BOT.send_photo(photo=photo, chat_id=message.from_user.id, caption='Для того, чтобы пользоваться полным функционалом профиля необходимо указать логин и пароль от портала', reply_markup=menu_inline)
+
+@DP.message_handler(filters.Text(equals='Продолжить >>'))
+async def reg(message: types.Message):
+    #Bot_DB.add_name(user_id=message.from_user.id, name=message.from_user.full_name, button='Зачетка', time=datetime.datetime.now())
+    
+    await message.answer(text='Укажите логин и пароль через пробел')
+    
 
 @DP.message_handler(filters.Text(equals='Настройки'))
 async def test(message: types.Message):

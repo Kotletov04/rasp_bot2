@@ -1,9 +1,11 @@
+
 function myFunction() {
-    document.getElementById("myDropdown").classList.toggle("show");
+    document.getElementById("open_zach").classList.toggle("show");
 }
+
 window.onclick = function(event) {
-    if (!event.target.matches('.dropbtn')) {
-      var dropdowns = document.getElementsByClassName("dropdown-content");
+    if (!event.target.matches('.button_zach')) {
+      var dropdowns = document.getElementsByClassName("zach_content");
       var i;
       for (i = 0; i < dropdowns.length; i++) {
         var openDropdown = dropdowns[i];
@@ -13,3 +15,4 @@ window.onclick = function(event) {
       }
     }
   }
+
