@@ -1,6 +1,7 @@
 
 function myFunction() {
     document.getElementById("open_zach").classList.toggle("show");
+    document.getElementById("button_color").classList.toggle("show_color");
 }
 
 window.onclick = function(event) {
@@ -13,6 +14,15 @@ window.onclick = function(event) {
           openDropdown.classList.remove('show');
         }
       }
+      var dropdowns_ = document.getElementsByClassName("zach_header");
+      var j;
+      for (j = 0; j < dropdowns_.length; j++) {
+        var openDropdown_ = dropdowns_[j];
+        if (openDropdown_.classList.contains('show_color')) {
+          openDropdown_.classList.remove('show_color');
+        }
+      }
     }
   }
+
 

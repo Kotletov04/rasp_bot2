@@ -39,3 +39,8 @@
     0% {top: 90px;}
     90% {transform: translateY(-150%);}
 }   
+
+
+#button_color.show_color {
+    background-color: rgb(123 151 179);
+}
