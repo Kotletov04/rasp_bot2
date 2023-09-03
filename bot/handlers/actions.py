@@ -14,6 +14,11 @@ import datetime
 from datetime import timedelta
 import pandas as pd
 
+import configparser
+
+
+import requests
+import json
 
 
 URL = read_config(name_key='URL', name_value='URL', name_file='config_settings.ini')
@@ -22,14 +27,25 @@ TOKEN = read_config(name_key='TOKEN', name_value='TOKEN', name_file='config_sett
 
 
 
-BOT = Bot(TOKEN)
-DP = Dispatcher(BOT)
-
 
 storage = MemoryStorage()
+
+
 class RegisterFSM(StatesGroup):
-    nickname_input = State()
-    pass_input = State()
+    
+    login_input = State()
+    password_input = State()
+    id_input = State()
+    fullname_input = State()
+    
+
+
+
+BOT = Bot(TOKEN)
+DP = Dispatcher(BOT, storage=storage)
+
+
+
 
 
 
@@ -44,7 +60,7 @@ async def start_command(message: types.Message):
         [
             types.KeyboardButton(text='Сегодня'),
             types.KeyboardButton(text='Завтра'),
-            types.KeyboardButton(text='Профиль', web_app=WebAppInfo(url=URL), web_app_data='text'),   
+            types.KeyboardButton(text='Профиль', web_app=WebAppInfo(url=URL)),   
         ],
 
         [
@@ -116,16 +132,107 @@ async def today_button(message: types.Message):
 async def reg(message: types.Message):
     #Bot_DB.add_name(user_id=message.from_user.id, name=message.from_user.full_name, button='Зачетка', time=datetime.datetime.now())
     
-    menu_inline = types.InlineKeyboardMarkup().insert(types.InlineKeyboardButton(text='Продолжить >>'))
-    photo = InputFile('C:\\Users\\amino\\Desktop\\rasp_bot2\\bot\\handlers\\images\\cat.jpg')
+    menu_inline = types.InlineKeyboardMarkup().insert(types.InlineKeyboardButton(text='Продолжить >>', callback_data='dalee'))
+    photo = InputFile('bot\\handlers\\images\\cat.jpg')
     await BOT.send_photo(photo=photo, chat_id=message.from_user.id, caption='Для того, чтобы пользоваться полным функционалом профиля необходимо указать логин и пароль от портала', reply_markup=menu_inline)
+    #await RegisterFSM.id_input.set()
 
-@DP.message_handler(filters.Text(equals='Продолжить >>'))
-async def reg(message: types.Message):
+
+    
+
+
+
+
+
+@DP.callback_query_handler(lambda c: c.data == 'dalee')
+async def process_callback_button1(callback_query: types.CallbackQuery):
     #Bot_DB.add_name(user_id=message.from_user.id, name=message.from_user.full_name, button='Зачетка', time=datetime.datetime.now())
     
-    await message.answer(text='Укажите логин и пароль через пробел')
+    config = configparser.ConfigParser()
+    config.read('bot/config/config_users.ini', encoding="latin-1")
+    print(callback_query.from_user.id)
+    if callback_query.from_user.id in list([int(i[5:]) for i in config.sections()]):
+        
+        await callback_query.answer("Вы уже зарегистрированы!")
+        
+    else:
+        
+        await callback_query.message.answer("Укажите ваш логин")
+        
+        await RegisterFSM.login_input.set()
+
     
+
+@DP.message_handler(state=RegisterFSM.login_input)
+async def input_login(message: types.Message, state: FSMContext):
+    if len(message.text) > 15:
+        await message.answer("Никнейм не должен превышать 15 символов")
+        return
+    async with state.proxy() as data:
+        data['LOGIN'] = message.text
+    
+    await message.answer('Укажите пароль')
+    await RegisterFSM.next()
+    
+
+@DP.message_handler(state=RegisterFSM.password_input)
+async def input_password(message: types.Message, state: FSMContext):
+    
+    
+    try:    
+
+        
+
+
+        async with state.proxy() as data:
+            data_ = {
+            'AUTH_FORM': 'Y',
+            'TYPE': 'AUTH',
+            'backurl': '/auth/?backurl=%2Fapp%2Fprofile%3Bmode%3Dedu%2Fmarks',
+            'USER_LOGIN': data['LOGIN'],
+            'USER_PASSWORD': message.text,
+                    }
+
+            
+
+
+            session = requests.Session()
+                    
+            session.post(url='https://portal.unn.ru', data=data_)
+            request = session.get('https://portal.unn.ru/bitrix/vuz/api/profile/bootstrap').text
+
+            data_json = json.loads(request)
+            name = data_json['profile']['user']['fullname']
+
+
+            config = configparser.ConfigParser()
+            config[f'USER-{message.from_user.id}'] = {
+                'ID': message.from_user.id,
+                'NAME': message.from_user.full_name,
+                'LOGIN': data['LOGIN'],
+                'PASSWORD': message.text,
+                'FULL_NAME': name
+            }
+            with open('bot/config/config_users.ini', 'a', encoding='utf-8') as configfile:
+                config.write(configfile)
+    
+
+        await message.answer(f'Регистрация заверена, вас зовут {name}')
+    
+        await state.finish()
+
+    except Exception as ex:
+        print(ex)
+        await message.answer('Данные указаны неверно')
+        await state.finish()
+    
+    
+    
+
+
+
+
+
 
 @DP.message_handler(filters.Text(equals='Настройки'))
 async def test(message: types.Message):
