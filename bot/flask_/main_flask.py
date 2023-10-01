@@ -77,8 +77,7 @@ def main():
 def reg():
     return render_template('reg.html')
 
-def keep_alive():
-    
+
 
 
 def run():
