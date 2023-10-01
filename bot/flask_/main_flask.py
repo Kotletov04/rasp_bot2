@@ -1,5 +1,24 @@
-from flask import Flask, render_template
+import sys
+sys.path.append('bot')
 
+from flask import Flask, render_template
+from parser.parser import Parser
+import datetime
+
+
+
+
+#dict_variable = {key:value for (key,value) in dictonary.items()}
+
+date = datetime.datetime.now()
+today = str(date.date().strftime("%m.%d"))
+week_today = date.date() + datetime.timedelta(days=7) 
+week_today = str(week_today.strftime("%m.%d"))
+
+data = Parser(today, week_today).rasp_tosite()
+
+
+'''
 
 rasp = {
     '16 июня Пт': {
@@ -45,18 +64,22 @@ type_lesson = 'Экзамен'
 name_lecturer = 'Рушева Анна Витальевна'
 stream = 'Поток:1422Б1УП1-OUP'
 auditorium = '124 (Корпус № 10)'
-
+'''
 app = Flask(__name__)
 
 @app.route('/')
 def main():
     return render_template('rasp.html',
-                            rasp = rasp
+                            rasp = data
                            )
 
 @app.route('/reg')
 def reg():
     return render_template('reg.html')
 
-if __name__ == '__main__':
+def keep_alive():
+    
+
+
+def run():
     app.run()

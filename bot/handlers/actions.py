@@ -11,7 +11,7 @@ from aiogram.types import InputFile
 
 
 import datetime
-from datetime import timedelta
+
 import pandas as pd
 
 import configparser
@@ -84,9 +84,15 @@ async def start_command(message: types.Message):
 async def today_button(message: types.Message):
     #Bot_DB.add_name(user_id=message.from_user.id, name=message.from_user.full_name, button='Сегодня', time=datetime.datetime.now())
     
-    dataframe = Parser(first_date='09.04', second_date='09.09').rasp()
     date = datetime.datetime.now()
+    
+    today = str(date.date().strftime("%m.%d"))
+    week_today = date.date() + datetime.timedelta(days=7) 
+    week_today = str(week_today.strftime("%m.%d"))
+    dataframe = Parser(first_date=today, second_date=week_today).rasp()
+    
     raspisaniye = dataframe[dataframe['date'] == date.date().strftime("%Y.%m.%d")]
+    discipline = raspisaniye['discipline'].tolist()
     lecturer = raspisaniye['lecturer'].tolist()
     week = raspisaniye['dayOfWeekString'].tolist()
     date = raspisaniye['date'].tolist()
@@ -99,17 +105,24 @@ async def today_button(message: types.Message):
         await message.answer(text='Нет занятий')
     else:
         text_list = 'Расписание на сегодня:\n'
-        for i, j, k, t_f, w, ty, t_l, bu in zip(lecturer, date, auditorium, time_first, week, type, time_last ,building):
-            text = f'\nПреподаватель {i} \nДата занятия {j} ({w}) \nАудитория ({bu}) {k} \nВремя {t_f} - {t_l} \nТип занятия: {ty} \n'
+        for i, j, k, t_f, w, ty, t_l, bu, dis in zip(lecturer, date, auditorium, time_first, week, type, time_last ,building, discipline):
+            text = f'\nПреподаватель {i} \nДата занятия {j} ({w}) \nАудитория ({bu}) {k} \nВремя {t_f} - {t_l} \nТип занятия: {ty} \nПара: {dis} \n'
             text_list = text_list+text
         await message.answer(text=text_list)
 
 @DP.message_handler(filters.Text(equals='Завтра'))
 async def today_button(message: types.Message):
     #Bot_DB.add_name(user_id=message.from_user.id, name=message.from_user.full_name, button='Завтра', time=datetime.datetime.now())
+    
+    date = datetime.datetime.now() + datetime.timedelta(days=1)
+    
+    today = str(date.date().strftime("%m.%d"))
+    week_today = date.date() + datetime.timedelta(days=7) 
+    week_today = str(week_today.strftime("%m.%d"))
+    dataframe = Parser(first_date=today, second_date=week_today).rasp()
 
-    dataframe = Parser(first_date='06.12', second_date='06.20').rasp()
-    date = datetime.datetime.now() + timedelta(days=1)
+    dataframe = Parser(first_date=today, second_date=week_today).rasp()
+    
     raspisaniye = dataframe[dataframe['date'] == date.date().strftime("%Y.%m.%d")]
     lecturer = raspisaniye['lecturer'].tolist()
     week = raspisaniye['dayOfWeekString'].tolist()
@@ -119,12 +132,13 @@ async def today_button(message: types.Message):
     building = raspisaniye['building']
     type = raspisaniye['kindOfWork'].tolist()
     auditorium = raspisaniye['auditorium'].tolist()
+    discipline = raspisaniye['discipline'].tolist()
     if raspisaniye.empty:
         await message.answer(text='Нет занятий')
     else:
         text_list = 'Расписание на завтра:\n'
-        for i, j, k, t_f, w, ty, t_l, bu in zip(lecturer, date, auditorium, time_first, week, type, time_last ,building):
-            text = f'\nПреподаватель: {i} \nДата занятия: {j} ({w}) \nАудитория: ({bu}) {k} \nВремя: {t_f} - {t_l} \nТип занятия: {ty} \n'
+        for i, j, k, t_f, w, ty, t_l, bu, dis in zip(lecturer, date, auditorium, time_first, week, type, time_last ,building, discipline):
+            text = f'\nПреподаватель: {i} \nДата занятия: {j} ({w}) \nАудитория: ({bu}) {k} \nВремя: {t_f} - {t_l} \nТип занятия: {ty} \nПара: {dis} \n'
             text_list = text_list+text
         await message.answer(text=text_list)
 
@@ -133,7 +147,7 @@ async def reg(message: types.Message):
     #Bot_DB.add_name(user_id=message.from_user.id, name=message.from_user.full_name, button='Зачетка', time=datetime.datetime.now())
     
     menu_inline = types.InlineKeyboardMarkup().insert(types.InlineKeyboardButton(text='Продолжить >>', callback_data='dalee'))
-    photo = InputFile('bot\\handlers\\images\\cat.jpg')
+    photo = InputFile('cat.jpg')
     await BOT.send_photo(photo=photo, chat_id=message.from_user.id, caption='Для того, чтобы пользоваться полным функционалом профиля необходимо указать логин и пароль от портала', reply_markup=menu_inline)
     #await RegisterFSM.id_input.set()
 
